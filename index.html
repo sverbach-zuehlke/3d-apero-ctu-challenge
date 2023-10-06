@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>POV: you're Markus</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
+    />
+    <link type="text/css" rel="stylesheet" href="main.css" />
+  </head>
+  <body>
+    <div id="container"></div>
+    <div id="side-bar">
+      <div>
+        <h1>3D Apéro Challenge 👩‍🍳</h1>
+        <ol>
+          <li>Find the hidden menu (you might need to move stuff around)</li>
+          <li>Get the food and place it on top of the plates</li>
+          <li>Submit your solution (ping me in teams)</li>
+        </ol>
+      </div>
+      <div>
+        <h2>Controls</h2>
+        <ul>
+          <li>
+            Press <b>SPACE</b> to
+            <span id="lock-unlock-text">unlock</span> looking around
+          </li>
+          <li>Press <b>W/S</b> to increase/decrease FOV</li>
+        </ul>
+      </div>
+    </div>
+
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "../build/three.module.js",
+          "three/addons/": "./jsm/"
+        }
+      }
+    </script>
+    <script type="module">
+      import * as THREE from "three";
+      import { initScene } from "./initScene";
+      import { loadObjects } from "./loadObjects";
+      import { loadNapkin } from "./loadNapkin";
+      import { initPhysics } from "./initPhysics";
+
+      const clock = new THREE.Clock();
+      const [scene, camera, renderer, renderTarget, controls] = initScene();
+      const world = initPhysics();
+
+      loadObjects(render, scene, renderer, camera, renderTarget);
+      const updateNapkinPhysics = loadNapkin(world, scene, -105, -190, 595);
+
+      function animate() {
+        controls.update(clock.getDelta());
+        updateNapkinPhysics();
+        world.fixedStep();
+        render();
+      }
+
+      function render() {
+        renderer.render(scene, camera);
+      }
+
+      renderer.setAnimationLoop(animate);
+
+      document.body.onkeydown = function (e) {
+        switch (e.code) {
+          case "Space":
+            controls.enabled = !controls.enabled;
+            document.getElementById("lock-unlock-text").innerText =
+              controls.enabled ? "lock" : "unlock";
+            break;
+
+          case "KeyS":
+          case "ArrowDown":
+            camera.fov++;
+            camera.updateProjectionMatrix();
+            break;
+
+          case "KeyW":
+          case "ArrowUp":
+            camera.fov--;
+            camera.updateProjectionMatrix();
+            break;
+        }
+      };
+    </script>
+  </body>
+</html>

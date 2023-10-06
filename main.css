@@ -1,0 +1,40 @@
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu+Mono:wght@400;700&display=swap');
+
+html, body {
+  height: 100%
+}
+
+body {
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  margin: 0;
+  font-size: 16px;
+  font-family: 'Ubuntu Mono', sans-serif;
+  line-height: 24px;
+  overscroll-behavior: none;
+  background-color: #c8c7f0;
+  color: #464480;
+}
+
+body.md {
+  flex-direction: column;
+
+  & canvas {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 60px;
+    border-bottom-left-radius: 60px;
+  }
+}
+
+canvas {
+  border-top-right-radius: 60px;
+  border-bottom-right-radius: 60px;
+}
+
+#side-bar {
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
